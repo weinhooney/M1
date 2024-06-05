@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleScene : MonoBehaviour
+public class TitleScene : BaseScene
 {
-    void Start()
+    public override bool Init()
     {
-        
+        if (false == base.Init()) { return false; }
+
+        SceneType = Define.EScene.TitleScene;
+
+        return true;
     }
 
-    void Update()
+    public override void Clear()
     {
-        
+
     }
 }

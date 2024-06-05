@@ -10,6 +10,12 @@ public class Managers : MonoBehaviour
 
     #region Core
     private DataManager _data = new DataManager();
+
+    internal static void Clear()
+    {
+        throw new NotImplementedException();
+    }
+
     private PoolManager _pool = new PoolManager();
     private ResourceManager _resource = new ResourceManager();
     private SceneManagerEx _scene = new SceneManagerEx();
