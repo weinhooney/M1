@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: UI
+  m_Name: Data
   m_EditorClassIdentifier: 
-  m_GroupName: UI
+  m_GroupName: Data
   m_Data:
     m_SerializedData: []
-  m_GUID: 03781a8b1e20b7e49bfbeb6eff9a0c8b
+  m_GUID: 0e67739cad1a0c34dbd5040cd463ec27
   m_SerializeEntries:
-  - m_GUID: 58a091e65b7bf85418bbc8541bb8401f
-    m_Address: AchievementIcon
+  - m_GUID: 5d418efd81401c249a291b8bc2c6c6d4
+    m_Address: TestData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -27,5 +27,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 29630a7a2d1905b47bbcf9bf4713d97c, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: bee46abe827bd634da49d349226d0621, type: 2}
-    - {fileID: 11400000, guid: 881f1ce23524aa943bf70c6b62f2c1f8, type: 2}
+    - {fileID: 11400000, guid: b4c5a20a0c656594b980ba0277f49836, type: 2}
+    - {fileID: 11400000, guid: e9303851cd11b4249b2fd82b7a335f19, type: 2}
