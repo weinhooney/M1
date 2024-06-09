@@ -19,6 +19,14 @@ public class ResourceManager
             return resource as T;
         }
 
+        if(typeof(T) == typeof(Sprite) && false == key.Contains(".sprite"))
+        {
+            if(_resources.TryGetValue($"{key}.sprite", out resource))
+            {
+                return resource as T;
+            }
+        }
+
         return null;
     }
 
@@ -71,8 +79,12 @@ public class ResourceManager
         var asyncOperation = Addressables.LoadAssetAsync<T>(loadKey);
         asyncOperation.Completed += (op) => 
         {
-            _resources.Add(key, op.Result);
-            _handles.Add(key, asyncOperation);
+            if (false == _resources.ContainsKey(key)) // 실제 에셋번들을 Load할 때 이상하게 Hero, AchievementIcon, Env가 중복 Load됨
+            {
+                _resources.Add(key, op.Result);
+                _handles.Add(key, asyncOperation);
+            }
+
             callback?.Invoke(op.Result);
         };
     }

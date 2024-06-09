@@ -17,14 +17,32 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 0e67739cad1a0c34dbd5040cd463ec27
   m_SerializeEntries:
-  - m_GUID: dcbdb0678c68ada498449458c648b140
-    m_Address: CreatureData
+  - m_GUID: b333c14d6d2f3564ca9c30543b75d762
+    m_Address: MonsterData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8f32a286a5feb8e40afd161d5cd48821
     m_Address: EnvData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5822cc7053e807741a55ba87711eeb55
+    m_Address: HeroData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5c6b96da95f47a41a290c81d61890f4
+    m_Address: SkillData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ee17fd196f1d5f4f8e56880cce63a78
+    m_Address: ProjectileData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

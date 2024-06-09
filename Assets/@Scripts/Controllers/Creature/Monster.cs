@@ -52,6 +52,10 @@ public class Monster : Creature
 
         // State
         CreatureState = ECreatureState.Idle;
+
+        // Skill
+        skills = gameObject.GetOrAddComponent<SkillComponent>();
+        skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     private void Start()
@@ -60,9 +64,6 @@ public class Monster : Creature
     }
 
     #region AI
-    public float SearchDistance { get; private set; } = 8.0f;
-    public float AttackDistance { get; private set; } = 4.0f;
-    Creature _target;
     Vector3 _destPos;
     Vector3 _initPos;
 
@@ -81,34 +82,18 @@ public class Monster : Creature
         }
 
         // Search Player
+        Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heroes, func: IsValid) as Creature;
+        if(null != creature)
         {
-            Creature target = null;
-            float bestDistanceSqr = float.MaxValue;
-            float searchDistanceSqr = SearchDistance * SearchDistance;
-
-            foreach (Hero hero in Managers.Object.Heroes)
-            {
-                Vector3 dir = hero.transform.position - transform.position;
-                float distToTargetSqr = dir.sqrMagnitude;
-
-                if (searchDistanceSqr < distToTargetSqr) { continue; }
-                if (bestDistanceSqr < distToTargetSqr) { continue; }
-
-                target = hero;
-                bestDistanceSqr = distToTargetSqr;
-            }
-
-            _target = target;
-            if (null != _target)
-            {
-                CreatureState = ECreatureState.Move;
-            }
+            Target = creature;
+            CreatureState = ECreatureState.Move;
+            return;
         }
     }
 
     protected override void UpdateMove()
     {
-        if(null == _target)
+        if(null == Target)
         {
             // Patrol or Return
             Vector3 dir = _destPos - transform.position;
@@ -123,53 +108,45 @@ public class Monster : Creature
         else
         {
             // Chase
-            Vector3 dir = (_target.transform.position - transform.position);
-            float distToTargetSqr = dir.sqrMagnitude;
-            float attackDistanceSqr = AttackDistance * AttackDistance;
+            SkillBase skill = skills.GetReadySkill();
+            ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);
 
-            if(distToTargetSqr < attackDistanceSqr) // 공격 범위 이내로 들어왔으면 공격
+            // 너무 멀어지면 포기
+            if (false == Target.IsValid())
             {
-                CreatureState = ECreatureState.Skill;
-                StartWait(2.0f);
-            }
-            else // 공격 범위 밖이라면 추적
-            {
-                SetRigidBodyVelocity(dir.normalized * MoveSpeed);
-
-                // 너무 멀어지면 포기
-                float searchDistanceSqr = SearchDistance * SearchDistance;
-                if(searchDistanceSqr < distToTargetSqr)
-                {
-                    _destPos = _initPos;
-                    _target = null;
-                    CreatureState = ECreatureState.Move;
-                }
+                Target = null;
+                _destPos = _initPos;
+                return;
             }
         }
     }
 
     protected override void UpdateSkill()
     {
-        if (null != _coWait) { return; }
-
-        CreatureState = ECreatureState.Move;
+        if(false == Target.IsValid())
+        {
+            Target = null;
+            _destPos = _initPos;
+            CreatureState = ECreatureState.Move;
+            return;
+        }
     }
 
     protected override void UpdateDead()
     {
-        
+        SetRigidBodyVelocity(Vector2.zero);
     }
     #endregion
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker)
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
     }
 
-    public override void OnDead(BaseObject attacker)
+    public override void OnDead(BaseObject attacker, SkillBase skill)
     {
-        base.OnDead(attacker);
+        base.OnDead(attacker, skill);
 
         // TODO : Drop Item
         Managers.Object.Despawn(this);
