@@ -264,6 +264,8 @@ public class Creature : BaseObject
         float finalDamage = creature.Atk;
         Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
 
+        Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, false);
+
         if(Hp <= 0)
         {
             OnDead(attacker, skill);

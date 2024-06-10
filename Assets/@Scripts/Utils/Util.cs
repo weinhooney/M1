@@ -63,6 +63,18 @@ public static class Util
         return (T)Enum.Parse(typeof(T), value, true);
     }
 
+    public static Color HexToColor(string color)
+    {
+        if (false == color.Contains("#"))
+        {
+            color = $"#{color}";
+        }
+
+        ColorUtility.TryParseHtmlString(color, out Color parsedColor);
+
+        return parsedColor;
+    }
+
     public static ECreatureType DetermineTargetType(ECreatureType ownerType, bool findAllies)
     {
         if(ECreatureType.Hero == ownerType)
