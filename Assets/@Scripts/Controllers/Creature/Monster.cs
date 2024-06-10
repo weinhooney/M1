@@ -93,17 +93,23 @@ public class Monster : Creature
 
     protected override void UpdateMove()
     {
-        if(null == Target)
+        if(false == Target.IsValid())
         {
-            // Patrol or Return
-            Vector3 dir = _destPos - transform.position;
-            if(dir.sqrMagnitude <= 0.01f)
+            Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heroes, func: IsValid) as Creature;
+            if(null != creature)
+            {
+                Target = creature;
+                CreatureState = ECreatureState.Move;
+                return;
+            }
+
+            // Move
+            FindPathAndMoveToCellPos(_destPos, MONSTER_DEFAULT_MOVE_DEPTH);
+            if(LerpCellPosCompleted)
             {
                 CreatureState = ECreatureState.Idle;
                 return;
             }
-
-            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
         }
         else
         {
@@ -134,7 +140,7 @@ public class Monster : Creature
 
     protected override void UpdateDead()
     {
-        SetRigidBodyVelocity(Vector2.zero);
+        //SetRigidBodyVelocity(Vector2.zero);
     }
     #endregion
 

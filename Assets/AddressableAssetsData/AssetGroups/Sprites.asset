@@ -12,11 +12,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
   m_Name: Sprites
   m_EditorClassIdentifier: 
-  m_GroupName: Packed Assets
+  m_GroupName: Sprites
   m_Data:
     m_SerializedData: []
   m_GUID: f91b48c4abff7124d8e99213178e2fc7
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 189e2249395e05a40af50684e2358c25
+    m_Address: 004.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad9b13230f9c3894884e35fdd463d9f9
+    m_Address: 005.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e334a71aaaee904c8e07547dfb9f815
+    m_Address: goblin_shot.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98746b0d00a325c4ca55d94a17e00adc
+    m_Address: wizard_shot.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f557cfa0156e6ed4d86f4e08e23c8298
+    m_Address: 003.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2866e1f69feba374e9ba7499aec76c6d
+    m_Address: 001.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7070e5b061f1d1847868d9eb0b4e7cb9
+    m_Address: 002.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70c47d429c75ad8489dfb257e05d1640
+    m_Address: Object_Mineral.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9456dad1f5957414ab37f3ac1e8f980e
+    m_Address: Object_Meat.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e9a97fa10743de468e835b553974a09
+    m_Address: Object_Firewood.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 29630a7a2d1905b47bbcf9bf4713d97c, type: 2}
   m_SchemaSet:
