@@ -31,6 +31,21 @@ public class Creature : BaseObject
     public float MoveSpeed { get; set; }
     #endregion
 
+    protected float AttackDistance
+    {
+        get
+        {
+            float env = 2.2f;
+            if(null != Target && EObjectType.Env == Target.ObjectType)
+            {
+                return Mathf.Max(env, Collider.radius + Target.Collider.radius + 0.1f);
+            }
+
+            float baseValue = CreatureData.AtkRange;
+            return baseValue;
+        }
+    }
+
     protected ECreatureState _creatureState = ECreatureState.None;
     public virtual ECreatureState CreatureState
     {
@@ -74,7 +89,7 @@ public class Creature : BaseObject
         Collider.radius = CreatureData.ColliderRadius;
 
         // RigidBody
-        RigidBody.mass = CreatureData.Mass;
+        RigidBody.mass = 0;
 
         // Spine
         SkeletonAnim.skeletonDataAsset = Managers.Resource.Load<SkeletonDataAsset>(CreatureData.SkeletonDataID);
@@ -92,7 +107,8 @@ public class Creature : BaseObject
         sg.sortingOrder = SortingLayers.CREATURE;
 
         // Skills
-        //CreatureData.SkillIdList
+        skills = gameObject.GetOrAddComponent<SkillComponent>();
+        skills.SetInfo(this, CreatureData);
 
         // Stat
         MaxHp = CreatureData.MaxHp;
@@ -171,8 +187,62 @@ public class Creature : BaseObject
 
     protected virtual void UpdateIdle() { }
     protected virtual void UpdateMove() { }
-    protected virtual void UpdateSkill() { }
+
+    protected virtual void UpdateSkill()
+    {
+        if (null != _coWait) { return; }
+
+        if(false == Target.IsValid() || EObjectType.HeroCamp == Target.ObjectType)
+        {
+            CreatureState = ECreatureState.Idle;
+            return;
+        }
+
+        Vector3 dir = Target.CenterPosition - CenterPosition;
+        float distToTargetSqr = dir.sqrMagnitude;
+        float attackDistanceSqr = AttackDistance * AttackDistance;
+        if(attackDistanceSqr < distToTargetSqr)
+        {
+            CreatureState = ECreatureState.Idle;
+            return;
+        }
+
+        skills.CurrentSkill.DoSkill();
+
+        LookAtTarget(Target);
+
+        var trackEntry = SkeletonAnim.state.GetCurrent(0);
+        float delay = trackEntry.Animation.Duration;
+
+        StartWait(delay);
+    }
+
     protected virtual void UpdateDead() { }
+    #endregion
+
+    #region Wait
+    protected Coroutine _coWait;
+
+    protected void StartWait(float seconds)
+    {
+        CancelWait();
+        _coWait = StartCoroutine(CoWait(seconds));
+    }
+
+    IEnumerator CoWait(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        _coWait = null;
+    }
+
+    protected void CancelWait()
+    {
+        if(null != _coWait)
+        {
+            StopCoroutine(_coWait);
+        }
+        _coWait = null;
+    }
     #endregion
 
     #region Battle
@@ -185,11 +255,11 @@ public class Creature : BaseObject
         Creature creature = attacker as Creature;
         if (null == creature) { return; }
 
-        // TEMP
-        if(ECreatureType.Hero == CreatureType)
-        {
-            return;
-        }
+        //// TEMP
+        //if(ECreatureType.Hero == CreatureType)
+        //{
+        //    return;
+        //}
 
         float finalDamage = creature.Atk;
         Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
@@ -233,54 +303,17 @@ public class Creature : BaseObject
         return target;
     }
 
-    //protected void ChaseOrAttackTarget(float attackRange, float chaseRange)
-    //{
-    //    Vector3 dir = Target.transform.position - transform.position;
-    //    float distToTargetSqr = dir.sqrMagnitude;
-    //    float attackDistanceSqr = attackRange * attackRange;
-
-    //    if (distToTargetSqr <= attackDistanceSqr)
-    //    {
-    //        // 공격 범위 이내로 들어왔다면 공격
-    //        CreatureState = ECreatureState.Skill;
-    //        return;
-    //    }
-    //    else
-    //    {
-    //        // 공격 범위 밖이라면 추적
-    //        SetRigidBodyVelocity(dir.normalized * MoveSpeed);
-
-    //        // 너무 멀어지면 포기
-    //        float searchDistanceSqr = chaseRange * chaseRange;
-    //        if (searchDistanceSqr < distToTargetSqr)
-    //        {
-    //            Target = null;
-    //            CreatureState = ECreatureState.Move;
-    //        }
-
-    //        return;
-    //    }
-    //}
-    protected void ChaseOrAttackTarget(float chaseRange, SkillBase skill)
+    protected void ChaseOrAttackTarget(float chaseRange, float attackRange)
     {
         Vector3 dir = Target.transform.position - transform.position;
         float distToTargetSqr = dir.sqrMagnitude;
+        float attackDistanceSqr = attackRange * attackRange;
 
-        // TEMP
-        float attackRange = HERO_DEFAULT_MELEE_ATTACK_RANGE;
-        if(0 != skill.SkillData.ProjectileId)
-        {
-            attackRange = HERO_DEFAULT_RANGED_ATTACK_RANGE;
-        }
-
-        float finalAttackRange = attackRange + Target.ColliderRadius + ColliderRadius;
-        float attackDistanceSqr = finalAttackRange * finalAttackRange;
 
         if(distToTargetSqr <= attackDistanceSqr)
         {
             // 공격 범위 이내로 들어왔다면 공격
             CreatureState = ECreatureState.Skill;
-            skill.DoSkill();
             return;
         }
         else

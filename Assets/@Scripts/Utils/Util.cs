@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public static class Util
 {
@@ -60,5 +61,46 @@ public static class Util
     public static T ParseEnum<T>(string value)
     {
         return (T)Enum.Parse(typeof(T), value, true);
+    }
+
+    public static ECreatureType DetermineTargetType(ECreatureType ownerType, bool findAllies)
+    {
+        if(ECreatureType.Hero == ownerType)
+        {
+            return findAllies ? ECreatureType.Hero : ECreatureType.Monster;
+        }
+        else if(ECreatureType.Monster == ownerType)
+        {
+            return findAllies ? ECreatureType.Monster : ECreatureType.Hero;
+        }
+
+        return ECreatureType.None;
+    }
+
+    public static float GetEffectRadius(EEffectSize size)
+    {
+        switch(size)
+        {
+            case EEffectSize.CircleSmall:
+                return EFFECT_SMALL_RADIUS;
+
+            case EEffectSize.CircleNormal:
+                return EFFECT_NORMAL_RADIUS;
+
+            case EEffectSize.CircleBig:
+                return EFFECT_BIG_RADIUS;
+
+            case EEffectSize.ConeSmall:
+                return EFFECT_SMALL_RADIUS * 2f;
+
+            case EEffectSize.ConeNormal:
+                return EFFECT_NORMAL_RADIUS * 2f;
+
+            case EEffectSize.ConeBig:
+                return EFFECT_BIG_RADIUS * 2f;
+
+            default:
+                return EFFECT_SMALL_RADIUS;
+        }
     }
 }

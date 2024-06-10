@@ -67,10 +67,6 @@ public class Hero : Creature
         base.SetInfo(templateID);
 
         CreatureState = ECreatureState.Idle;
-
-        // Skill
-        skills = gameObject.GetOrAddComponent<SkillComponent>();
-        skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     #region AI
@@ -154,8 +150,7 @@ public class Hero : Creature
                 return;
             }
 
-            SkillBase skill = skills.GetReadySkill();
-            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, skill);
+            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, AttackDistance);
             return;
         }
 
@@ -180,8 +175,7 @@ public class Hero : Creature
                 return;
             }
 
-            SkillBase skill = skills.GetReadySkill();
-            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, skill);
+            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, AttackDistance);
             return;
         }
 
@@ -276,6 +270,8 @@ public class Hero : Creature
 
     protected override void UpdateSkill()
     {
+        base.UpdateSkill();
+
         if(EHeroMoveState.ForceMove == HeroMoveState)
         {
             CreatureState = ECreatureState.Move;

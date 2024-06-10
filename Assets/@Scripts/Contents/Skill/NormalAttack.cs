@@ -27,15 +27,7 @@ public class NormalAttack : SkillBase
         Owner.LookAtTarget(Owner.Target);
     }
 
-    protected override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
-    {
-        if(e.ToString().Contains(SkillData.AnimName))
-        {
-            OnAttackEvent();
-        }
-    }
-
-    protected virtual void OnAttackEvent()
+    protected override void OnAttackEvent()
     {
         if (false == Owner.Target.IsValid()) { return; }
 
@@ -48,16 +40,6 @@ public class NormalAttack : SkillBase
         {
             // Ranged
             GenerateProjectile(Owner, Owner.CenterPosition);
-        }
-    }
-
-    protected override void OnAnimCompleteHandler(TrackEntry trackEntry)
-    {
-        if (false == Owner.Target.IsValid()) { return; }
-
-        if(Define.ECreatureState.Skill == Owner.CreatureState)
-        {
-            Owner.CreatureState = Define.ECreatureState.Move;
         }
     }
 }
