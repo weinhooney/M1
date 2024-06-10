@@ -185,6 +185,12 @@ public class Creature : BaseObject
         Creature creature = attacker as Creature;
         if (null == creature) { return; }
 
+        // TEMP
+        if(ECreatureType.Hero == CreatureType)
+        {
+            return;
+        }
+
         float finalDamage = creature.Atk;
         Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
 
